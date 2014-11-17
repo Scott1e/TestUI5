@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>SAPUI5 mobile test</title>
+    <!-- 1.) Load SAPUI5 (from a remote server), select theme and control library -->
+    <script id="sap-ui-bootstrap" src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" data-sap-ui-theme="sap_bluecrystal" data-sap-ui-libs="sap.m"></script>
+
+    <script>
+    // create a mobile App
+    // it initializes the HTML page for mobile use and provides animated page handling
+
+    var app = new sap.m.App("myApp", {
+        initialPage: "page1"
+    });
+    // page1 should be displayed first
+
+    var subject = "test";
+
+    var body = "Hello World";
+
+    var btn = new sap.m.Button({
+        text: "Go to Page 3",
+        press: function() {
+            app.to("page3");
+        }
+    });
+
+    var btn2 = new sap.m.Button("btn", {
+        text: "fade it",
+        press: function() {
+            $("#btn").fadeOut()
+        }
+    });
+
+    var btn3 = new sap.m.Button("btn1", {
+        text: "send it",
+        press: function() {
+            window.open('mailto:' + txt.getValue() + "?subject=" + subject + "&body=" + body)
+        }
+    });
+
+    var txt = new sap.m.Input("txt", {
+        value: "Enter email adress here",
+    });
+
+    var btn4 = new sap.m.Button("btn4", {
+        text: "or don't",
+        press: function() {
+            $("#txt").fadeOut("slow")
+        }
+    });
+
+    // create the first page of application
+    var page1 = new sap.m.Page("page1", {
+        title: "Initial Page",
+        content: new sap.m.Button({
+            // content is just one Button
+            text: "Go to Page 2",
+            press: function() {
+                app.to("page2");
+                // when pressed, it triggers drilldown to page 2
+            }
+        })
+    });
+
+    var page2 = new sap.m.Page("page2", {
+        title: "Page 2",
+        showNavButton: true,
+        // page 2 should display a back button
+        navButtonPress: function() {
+            app.back();
+            // when tapped, the back button should navigate back up to page 1
+        },
+        icon: "http://www.sap.com/global/ui/images/global/sap-logo.png",
+        content: [btn, btn2]
+    });
+
+    var page3 = new sap.m.Page("page3", {
+        title: "Page 3",
+        showNavButton: true,
+        // page 2 should display a back button
+        navButtonPress: function() {
+            app.back();
+            // when tapped, the back button should navigate back up to page 1
+        },
+        icon: "http://www.sap.com/global/ui/images/global/sap-logo.png",
+        content: [txt, btn3, btn4]
+    });
+    // add pages to the App
+    app.addPage(page1).addPage(page2).addPage(page3);
+
+
+    app.placeAt("content"); // place the App into the HTML document
+    </script>
+
+</head>
+
+<body class="sapUiBody">
+
+    <div id="content"></div>
+
+</body>
+
+</html>

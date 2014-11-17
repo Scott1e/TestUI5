@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+
+    <title>Vendor Search</title>
+
+    <script id='sap-ui-bootstrap' src='https://sapui5.hana.ondemand.com/resources/sap-ui-core.js' data-sap-ui-theme='sap_bluecrystal' data-sap-ui-libs='sap.ui.commons'>
+    </script>
+
+    <script>
+
+    var aVendorList = ["Bursons","Coleman","J.M.Gillies","Bose","Chief Oil","Jetstar","Bowers & Wilkins", "Campmart", "Bang and Olufsen"];
+
+    aVendorList.sort();
+
+jQuery.sap.require("jquery.sap.strings"); //Load the plugin to use 'jQuery.sap.startsWithIgnoreCase'
+
+//Help function to filter the countries according to the given prefix
+var filterVendors = function(sPrefix){
+    var aResult = [];
+    for(var i=0; i<aVendorList.length; i++){
+        if(!sPrefix || sPrefix.length == 0 || jQuery.sap.startsWithIgnoreCase(aVendorList[i], sPrefix)){
+            aResult.push(aVendorList[i]);
+        }
+    }
+    return aResult;
+};
+
+//Help function to handle the suggest events of the search field
+var doSuggest = function(oEvent){
+    var sVal = oEvent.getParameter("value");
+    var aSuggestions = filterVendors(sVal); //Find the countries (see example above)
+    var oSearchControl = sap.ui.getCore().byId(oEvent.getParameter("id"));
+    oSearchControl.suggest(sVal, aSuggestions); //Set the found suggestions on the search control
+};
+
+// create a simple SearchField with suggestion list (list expander visible)
+var oSearch = new sap.ui.commons.SearchField("suggestSearch1", {
+    width: "80%",
+    enableClear: true,
+    enableListSuggest: true,
+    startSuggestion: 1,
+    search: function(oEvent){
+        alert("Nope! not searching for: " + oEvent.getParameter("query"));
+    },
+    suggest: doSuggest
+});
+//attach it to some element in the page
+oSearch.placeAt("sample2");
+
+/*//create a simple SearchField with suggestion list (list expander hidden)
+var oSearch = new sap.ui.commons.SearchField("suggestSearch2", {
+    enableListSuggest: true,
+    showListExpander: false,
+    startSuggestion: 1,
+    search: function(oEvent){
+        alert("Search triggered: " + oEvent.getParameter("query"));
+    },
+    suggest: doSuggest
+});
+//attach it to some element in the page
+oSearch.placeAt("sample2");*/
+
+
+
+
+    </script>
+
+</head>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: large; /* !!! */
+}
+</style>
+
+<body class='sapUiBody'>
+
+<div id = 'header'>
+
+&nbsp;
+
+</div>
+
+<div id='sample2'></div>
+
+</body>
+
+</html>
